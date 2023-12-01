@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Question Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .question-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .answer-animation {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Random Question Generator</h1>
+    <div class="question-box">
+      <p id="question">Click 'Show Question' to begin</p>
+      <button id="showQuestionBtn">Show Question</button>
+      <button id="showAnswerBtn" style="display: none;">Show Answer</button>
+      <button id="nextQuestionBtn" style="display: none;">Next Question</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+  { question: "JavaScript framework developed by Facebook?", answer: "React" },
+  { question: "What does SQL stand for?", answer: "Structured Query Language" },
+  { question: "What's the name of the Linux kernel creator?", answer: "Linus Torvalds" },
+  { question: "What's the default port for HTTPS?", answer: "443" },
+  { question: "Which type of SQL JOIN returns all rows from both tables?", answer: "Full outer join" },
+  { question: "What's the term for a programming language's ability to call its own functions recursively?", answer: "Recursion" },
+  { question: "What's the symbol for the SQL wildcard for multiple characters?", answer: "%" },
+  { question: "Which programming language is known for its use in statistical computing and graphics?", answer: "R" },
+  { question: "Name the default package manager for Node.js.", answer: "npm (Node Package Manager)" },
+  { question: "What does 'API' stand for in the context of software development?", answer: "Application Programming Interface" },
+  { question: "What's the role of a CDN in web development?", answer: "Speeds up content delivery" },
+  { question: "Which programming paradigm emphasizes breaking down problems into smaller parts?", answer: "Functional programming" },
+  { question: "Name the standard language for creating web pages and web applications.", answer: "HTML (Hypertext Markup Language)" },
+  { question: "What's the primary use of a firewall in computer networks?", answer: "Security" },
+  { question: "What's the purpose of a primary key in a database table?", answer: "Uniquely identify records" },
+  { question: "Name the software development process that involves short development cycles.", answer: "Agile" },
+  { question: "Which HTTP status code represents a successful request?", answer: "200" },
+  { question: "Name the widely used relational database management system developed by Oracle.", answer: "MySQL" },
+  { question: "Name the programming language developed by Microsoft often used for web development.", answer: "C#" },
+  { question: "What's the role of a primary key in a database?", answer: "Uniquely identify records" },
+  { question: "Which tag is used for creating hyperlinks in HTML?", answer: "<a>" },
+  { question: "What's the purpose of the 'alt' attribute in HTML images?", answer: "Alternative text for accessibility" },
+  { question: "Name the protocol that facilitates email transmission on the internet.", answer: "SMTP (Simple Mail Transfer Protocol)" },
+  { question: "What's the purpose of the 'src' attribute in HTML?", answer: "Define the source of an element, such as an image or script" },
+  { question: "Which programming language is known for its use in creating dynamic web pages?", answer: "JavaScript" },
+  { question: "Name the term for a software tool that finds and removes bugs from code.", answer: "Debugger" },
+  { question: "What's the difference between 'GET' and 'POST' methods in HTTP?", answer: "Data retrieval vs. data submission to a server" },
+  { question: "Name the protocol used for securely transferring files over a network.", answer: "FTP (File Transfer Protocol)" },
+  { question: "Which HTTP status code represents a page not found error?", answer: "404" },
+  { question: "What's the purpose of a firewall in network security?", answer: "Controls incoming/outgoing traffic" },
+  { question: "Name the type of attack that attempts to overwhelm a server with excessive requests.", answer: "DDoS (Distributed Denial of Service)" },
+  { question: "What does 'DDoS' stand for in cybersecurity?", answer: "Distributed Denial of Service" },
+  { question: "What's the primary role of a web server?", answer: "Serve web pages to clients upon request" },
+  { question: "Which cybersecurity attack injects malicious scripts into web pages viewed by users?", answer: "Cross-site scripting (XSS)" },
+  { question: "Which type of attack occurs when an attacker tries all possible combinations to guess a password?", answer: "Brute force attack" },
+  { question: "Which technology is used to secure and encrypt cryptocurrencies?", answer: "Blockchain" },
+  { question: "Which technology allows computers to understand, interpret, and respond to human language?", answer: "Natural Language Processing (NLP)" },
+  { question: "Where is Verisk Nepal Office located?", answer: "Pulchowk, Lalitpur" },
+  { question: "Give any 3-technology stack that Verisk Nepal works on.", answer: "JAVA, .NET, PYTHON" },
+  { question: "Name the concept that allows software to operate on different platforms.", answer: "Cross-platform" },
+  { question: "Explain the role of a 'cookie' in web browsing.", answer: "Store user data" },
+  { question: "What does DNS stand for in networking?", answer: "Domain Name System" }
+];
+
+
+    const questionDisplay = document.getElementById('question');
+    const showQuestionBtn = document.getElementById('showQuestionBtn');
+    const showAnswerBtn = document.getElementById('showAnswerBtn');
+    const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+
+    let currentQuestionIndex;
+
+    function displayQuestion() {
+      currentQuestionIndex = Math.floor(Math.random() * questions.length);
+      questionDisplay.textContent = questions[currentQuestionIndex].question;
+      showQuestionBtn.style.display = 'none';
+      showAnswerBtn.style.display = 'inline-block';
+      nextQuestionBtn.style.display = 'none';
+    }
+
+    function displayAnswer() {
+      questionDisplay.textContent = questions[currentQuestionIndex].answer;
+      showAnswerBtn.style.display = 'none';
+      nextQuestionBtn.style.display = 'inline-block';
+      // Simple animation
+      questionDisplay.classList.add('answer-animation');
+      setTimeout(() => {
+        questionDisplay.classList.remove('answer-animation');
+      }, 1000); // Change the duration of the animation (in milliseconds) if needed
+    }
+
+    function nextQuestion() {
+      showQuestionBtn.style.display = 'inline-block';
+      nextQuestionBtn.style.display = 'none';
+      questionDisplay.textContent = "Click 'Show Question' to begin";
+    }
+
+    showQuestionBtn.addEventListener('click', displayQuestion);
+    showAnswerBtn.addEventListener('click', displayAnswer);
+    nextQuestionBtn.addEventListener('click', nextQuestion);
+  </script>
+</body>
+</html>
